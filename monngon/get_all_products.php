@@ -33,6 +33,7 @@ if (mysqli_num_rows($result) > 0) {
         $product["description"] = utf8_encode($row["description"]);
         $product["material"] = utf8_encode($row["material"]);
         $product["image"] = utf8_encode($row["image"]);
+		$product["making"] = utf8_encode($row["making"]);
  
         // push single product into final response array
         $response["mons"][] = $product;
