@@ -28,23 +28,56 @@ if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_array($result)) {
         // temp user array
         $product = array();
-        $product["id"] = utf8_encode($row["id"]);
-        $product["title"] = utf8_encode($row["title"]);
-        $product["description"] = utf8_encode($row["description"]);
-        $product["material"] = utf8_encode($row["material"]);
-        $product["image"] = utf8_encode($row["image"]);
-		$product["making"] = utf8_encode($row["making"]);
+        $product["id"] = ($row["id"]);
+        $product["title"] = ($row["title"]);
+        $product["description"] = ($row["description"]);
+        $product["material"] = ($row["material"]);
+        $product["image"] =($row["image"]);
+		$product["making"] = ($row["making"]);
  
         // push single product into final response array
         $response["mons"][] = $product;
     }
 	
+	$result = mysqli_query($link,"SELECT *FROM material") or die(mysqli_error());
+	// check for empty result
+	if (mysqli_num_rows($result) > 0) {
+    // looping through all results
+    // products node
+    $response["materials"] = array();
+    
+    while ($row = mysqli_fetch_array($result)) {
+        // temp user array
+        $material = array();
+        $material["id_material"] = ($row["id_material"]);
+        $material["name_material"] = ($row["name_material"]);
+        // push single product into final response array
+        $response["materials"][] = $material;
+    }
+	}
+	
+	$result = mysqli_query($link,"SELECT *FROM cachnau") or die(mysqli_error());
+	// check for empty result
+	if (mysqli_num_rows($result) > 0) {
+    // looping through all results
+    // products node
+    $response["cachnaus"] = array();
+    
+    while ($row = mysqli_fetch_array($result)) {
+        // temp user array
+        $cachnaus = array();
+        $cachnaus["id_cooking_type"] = ($row["id_cooking_type"]);
+        $cachnaus["name_cooking_type"] = ($row["name_cooking_type"]);
+        // push single product into final response array
+        $response["cachnaus"][] = $cachnaus;
+    }
+	}
     // success
     $response["success"] = 1;
-
     // echoing JSON response
 	//header("Content-type: application/json; charset=utf-8");
-	Header('Content-Type: application/json; charset=UTF-8');
+
+	header('Content-Type: application/json; charset=UTF-8');
     echo json_encode($response, JSON_UNESCAPED_UNICODE);
 } else {
     // no products found
