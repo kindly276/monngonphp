@@ -16,7 +16,7 @@ $db = new DB_CONNECT();
 $link = $db->connect();	
 // get all products from products table
 
-$result = mysqli_query($link,"SELECT *FROM mons") or die(mysqli_error());
+$result = mysqli_query($link,"SELECT *FROM mons WHERE is_seven_day=1 LIMIT 7 ") or die(mysqli_error());
 
 
 // check for empty result
@@ -39,7 +39,7 @@ if (mysqli_num_rows($result) > 0) {
         $response["mons"][] = $product;
     }
 	
-	$result = mysqli_query($link,"SELECT *FROM mons") or die(mysqli_error());
+	$result = mysqli_query($link,"SELECT *FROM mons WHERE is_most_view=1 LIMIT 20 ") or die(mysqli_error());
 	// check for empty result
 	if (mysqli_num_rows($result) > 0) {
     // looping through all results

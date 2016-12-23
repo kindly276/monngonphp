@@ -6,10 +6,16 @@
  // determine page number from $_GET
 $page = 1;
 // set the number of items to display per page
-$items_per_page = 4;
+$items_per_page = 10;
 
 $id_material=-1;
 $id_dipnau=-1;
+$id_cooking_type=-1;
+
+
+$type_material=1;
+$type_dipnau=3;
+$cooking_type=2;
 
 if(!empty($_POST['page'])) {
     $page = filter_input(INPUT_POST, 'page', FILTER_VALIDATE_INT);
@@ -23,24 +29,20 @@ if(!empty($_POST['num_page'])) {
         $page = 4;
     }
 }
-if(!empty($_POST['id_material'])) {
-    $id_material = filter_input(INPUT_POST, 'id_material', FILTER_VALIDATE_INT);
-    if(false === $id_material) {
-        $id_material = -1;
-    }
+if(!empty($_POST['type'])) {
+    $type = filter_input(INPUT_POST, 'type', FILTER_VALIDATE_INT);
+	if(!empty($_POST['id'])) {
+		$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+		if( $type === $type_material) {
+			$id_material = $id;
+		}else if($type === $type_dipnau){
+			$id_dipnau = $id;
+		}else if($type === $cooking_type){
+			$id_cooking_type = $id;
+		}
+	}
 }
-if(!empty($_POST['id_cooking_type'])) {
-    $id_cooking_type = filter_input(INPUT_POST, 'id_cooking_type', FILTER_VALIDATE_INT);
-    if(false === $id_cooking_type) {
-        $id_cooking_type = -1;
-    }
-}
-if(!empty($_POST['id_dipnau'])) {
-    $id_dipnau = filter_input(INPUT_POST, 'id_dipnau', FILTER_VALIDATE_INT);
-    if(false === $id_dipnau) {
-        $id_dipnau = -1;
-    }
-}
+
 
 
 
@@ -58,14 +60,16 @@ $db = new DB_CONNECT();
 $link = $db->connect();	
 // get all products from products table
 
+
 if($id_material!=-1){
 
-	$result = mysqli_query($link,"SELECT * FROM mons Where id_material =$id_material LIMIT " . $offset . "," . $items_per_page) or die(mysqli_error());
+	$result = mysqli_query($link,"SELECT * FROM mons INNER JOIN materialmon
+ON mons.id=materialmon.id Where materialmon.id_material =$id_material LIMIT " . $offset . "," . $items_per_page) or die(mysqli_error());
 }else if($id_cooking_type!=-1){
 	$result = mysqli_query($link,"SELECT * FROM mons Where id_cooking_type =$id_cooking_type LIMIT " . $offset . "," . $items_per_page) or die(mysqli_error());
 	
-}else if($id_material!=-1){
-	$result = mysqli_query($link,"SELECT * FROM mons Where id_material =$id_material LIMIT " . $offset . "," . $items_per_page) or die(mysqli_error());
+}else if($id_dipnau!=-1){
+	$result = mysqli_query($link,"SELECT * FROM mons Where id_dipnau =$id_dipnau LIMIT " . $offset . "," . $items_per_page) or die(mysqli_error());
 	
 }else{
 	$result = mysqli_query($link,"SELECT * FROM mons LIMIT " . $offset . "," . $items_per_page) or die(mysqli_error());
