@@ -22,13 +22,7 @@ require_once __DIR__ . '/db_connect.php';
 $db = new DB_CONNECT(); 
 $link = $db->connect(); // get all products from products table 
 
-//Nguyen lieu
-$result_material = mysqli_query($link,"SELECT *FROM material") or die(mysqli_error()); 
-$op_material = '';
- while($row = mysqli_fetch_array($result_material))
-{
-  $op_material .= '<option value = "'.$row['id_material'].'">'.$row['name_material'].'</option>';
-}
+
 //Cach lam
 $result_cachnau = mysqli_query($link,"SELECT *FROM cachnau") or die(mysqli_error()); 
 $op_cachnau = '';
@@ -36,13 +30,7 @@ $op_cachnau = '';
 {
   $op_cachnau .= '<option value = "'.$row['id_cooking_type'].'">'.$row['name_cooking_type'].'</option>';
 }
-//Dip nau
-$result_dipnau = mysqli_query($link,"SELECT *FROM dipnau") or die(mysqli_error()); 
-$op_dipnau = '';
- while($row = mysqli_fetch_array($result_dipnau))
-{
-  $op_dipnau .= '<option value = "'.$row['id_dipnau'].'">'.$row['name_dipnau'].'</option>';
-}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["title"])) {
@@ -94,12 +82,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 	if($isTitle==true&$isDescription==true&$isMaterial==true&$isImage==true&$isVideo==true&$isMaking==true){
 	//if($isTitle){
-		$materialOption = $_POST['materialop'];
+	
 		$cachnauOption = $_POST['cachnauop'];
-		$dipnauOption = $_POST['dipnauop'];
-		echo "You have materialOption :" .$materialOption;
-		echo "You have cachnauOption :" .$cachnauOption;
-		echo "You have dipnauOption :" .$dipnauOption;
+	
+		$chkmaterial = $_POST['chkmaterial'];
+		if(empty($chkmaterial)) 
+		{
+				echo("You didn't select any buildings.");
+		} 
+		else
+		{
+			$N = count($chkmaterial);
+ 
+			echo("You selected $N door(s): ");
+			for($i=0; $i < $N; $i++)
+			{
+				echo($chkmaterial[$i] . " ");
+			}
+		}
+		
+		 $chkmaterial = $_POST['chkmaterial'];
+		
+		
+		if(empty($chkdipnau)) 
+		{
+				echo("You didn't select any buildings.");
+		} 
+		else
+		{
+			$N = count($chkdipnau);
+ 
+			echo("You selected $N door(s): ");
+			for($i=0; $i < $N; $i++)
+			{
+				echo($chkdipnau[$i] . " ");
+			}
+		}
+
+		
+		
 		 // Câu SQL Insert
 		/*
 		$sql = "INSERT INTO material (name_material) 
@@ -184,7 +205,7 @@ $result_material = mysqli_query($link,"SELECT *FROM material") or die(mysqli_err
 
     while($row = mysqli_fetch_array($result_material))
 {
-	  echo '<input type="checkbox" name="chkmaterial" value="'.$row['id_material'].'"  /> '.$row['name_material'].'';
+	  echo '<input type="checkbox" name="chkmaterial[]" value="'.$row['name_material'].'"  /> '.$row['name_material'].'';
 }
 ?>
 <br><br>
@@ -200,7 +221,7 @@ $result_dipnau = mysqli_query($link,"SELECT *FROM dipnau") or die(mysqli_error()
 
     while($row = mysqli_fetch_array($result_dipnau))
 {
-	  echo '<input type="checkbox" name="chdipnau" value="'.$row['id_dipnau'].'"  /> '.$row['name_dipnau'].'';
+	  echo '<input type="checkbox" name="chkdipnau[]" value="'.$row['id_dipnau'].'"  /> '.$row['name_dipnau'].'';
 }
 ?>
  <br><br>
